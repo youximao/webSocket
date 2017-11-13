@@ -16,7 +16,7 @@ import java.util.Date;
  * Created by Administrator on 2017/10/11 0011.
  */
 @Controller
-
+@RequestMapping("/ws")
 public class webSockCon {
 
     @Autowired
@@ -27,6 +27,10 @@ public class webSockCon {
         mess(String s){
             this.s=s;
         }
+    }
+    @RequestMapping("/noframe")
+    public String getNoFrame(){
+        return "NoFrame";
     }
 
     @RequestMapping("/ws")
@@ -41,11 +45,18 @@ public class webSockCon {
     //    simpMessagingTemplate.convertAndSend("/topic/send","jiajunl");
         return string;
     }
+
+    @MessageMapping("/chat")
+    public void withChat(Principal principal,String mes){
+        simpMessagingTemplate.convertAndSendToUser(principal.getName(),"/topic/send",mes);
+    }
+
     @MessageMapping("/test")
     public void sendMessage(String string){
         System.out.println(string);
         simpMessagingTemplate.convertAndSend("/topic/send",string);
     }
+
     @RequestMapping("/sendAll")
     public void sendAll(){
         simpMessagingTemplate.convertAndSend("/topic/send","fasong suoyou");
@@ -56,6 +67,9 @@ public class webSockCon {
     public void sendMm(Principal principal,String msg){
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         simpMessagingTemplate.convertAndSend("/topic/send", df.format(new Date()));
+
+
+        //simpMessagingTemplate.send();
         System.out.println("-------");
     }
 

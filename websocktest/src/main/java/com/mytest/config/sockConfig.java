@@ -1,4 +1,4 @@
-package com.mytest;
+package com.mytest.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
@@ -22,4 +22,7 @@ public class sockConfig extends AbstractWebSocketMessageBrokerConfigurer {
         super.configureMessageBroker(registry);
         registry.enableSimpleBroker("/topic");
     }
+
+
+
 }
