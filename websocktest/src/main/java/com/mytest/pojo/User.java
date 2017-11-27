@@ -4,10 +4,7 @@ package com.mytest.pojo;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Collection;
 
 /**
@@ -17,6 +14,7 @@ import java.util.Collection;
 @Table(name ="seruser" )
 public class User implements UserDetails {
     @Id
+    @GeneratedValue
     @Column(name = "id")
     int id;
 
@@ -24,6 +22,14 @@ public class User implements UserDetails {
     String name;
     @Column(name = "passwd")
     String passwd;
+
+    public User(String name, String passwd) {
+        this.name = name;
+        this.passwd = passwd;
+    }
+    public User(){
+        super();
+    }
 
     public int getId() {
         return id;

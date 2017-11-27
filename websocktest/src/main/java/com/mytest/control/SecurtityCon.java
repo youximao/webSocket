@@ -1,5 +1,8 @@
 package com.mytest.control;
 
+import com.mytest.DAO.UserLoginReg;
+import com.mytest.pojo.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -23,6 +26,23 @@ public class SecurtityCon {
     }
     @RequestMapping("/ee")
     public String getError(){
+        return "regist";
+    }
+
+    @RequestMapping("/regist")
+    public String getRegist(){
+        return "regist";
+    }
+
+    @Autowired
+    UserLoginReg userLoginReg;
+
+    @RequestMapping("/registuser")
+    public String getRegistUser(HttpServletRequest request){
+        String name=request.getParameter("name");
+        String passwd=request.getParameter("passwd");
+        userLoginReg.save(new User(name,passwd));
         return "login";
     }
+
 }

@@ -31,14 +31,15 @@ public class WebSercurityCon  extends WebSecurityConfigurerAdapter{
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        super.configure(http);
+
 
         http.authorizeRequests().
-                antMatchers("/", "/webjars/**", "/register", "/api/common/**", "/image/**","/index").permitAll()
+                antMatchers("/lib/**","/regist","/registuser", "/webjars/**", "/register", "/api/common/**", "/image/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                     .formLogin().loginPage("/login").defaultSuccessUrl("/index", true).failureForwardUrl("/ee").permitAll()
                 .and().
-                    logout().permitAll().and().csrf().disable();
+                    logout().permitAll()
+        .and().csrf().disable();
     }
 }
