@@ -21,23 +21,36 @@
         <script src="/lib/vue.js"></script>
 
 </head>
+
 <body align="center">
 
-<div class="input-group">
-<form class="form-control" action="/login" method="post">
-    <div class="input-group">
-        <span class="input-group-addon">名字</span>
-        <input class="form-control" type="text" name="username" placeholder="名字"/><br/>
+    <div class="panel panel-success">
+            <div class="panel-heading col-lg-12">
+                <h3 class="panel-title">
+                    登录
+                </h3>
+            </div>
+
+        <div class="panel-body col-lg-12">
+
+                    <form class="" action="/login" method="post">
+                        <div class="input-group">
+                            <span class="input-group-addon">名字</span>
+                            <input class="form-control" type="text" name="username" placeholder="请输入名字"/><br/>
+                        </div>
+                        <div class="input-group">
+                            <span class="input-group-addon">密码</span>
+                            <input class="form-control" type="password" name="password" placeholder="请输入密码"/><br/>
+                        </div>
+                        <div class="" >
+                        <button class="btn" type="submit">登录</button>
+                        <div class="btn"><a href="./regist">注册</a></div>
+                        </div>
+                    </form>
+
+        </div>
+
     </div>
-    <div class="input-group">
-        <span class="input-group-addon">密码</span>
-        <input class="form-control" type="password" name="password" placeholder="密码"/><br/>
-    </div>
-    <div class="input-group" style="margin: 0px 75px">
-    <button class="btn" type="submit">登录</button>
-    <div class="btn"><a href="./regist">注册</a></div>
-    </div>
-</form>
-</div>
+
 </body>
 </html>

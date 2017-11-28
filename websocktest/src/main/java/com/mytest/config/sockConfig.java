@@ -22,7 +22,4 @@ public class sockConfig extends AbstractWebSocketMessageBrokerConfigurer {
         super.configureMessageBroker(registry);
         registry.enableSimpleBroker("/topic");
     }
-
-
-
 }

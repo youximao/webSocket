@@ -3,12 +3,14 @@ var vm=new Vue({
     data: {
         isconnect:"未连接",
         stompClient:null,
+        alltext:"广播",
         user:[],
         chatinfo:[],
         usernum:'',
         nowchat:'',
         nowuser:'',
-        chattext:''
+        chattext:'',
+        chathistory:[]
     },
     created : function () {
 
@@ -20,6 +22,8 @@ var vm=new Vue({
         changechatuser: function (name) {
             var self=this;
             self.nowchat=name;
+            //self.chathistory.push(name,self.chatinfo);
+            //self.chatinfo=self.chathistory[self.nowchat];
         },
         getdata:function () {
             var self = this;
@@ -50,11 +54,11 @@ var vm=new Vue({
 
         console.log('开始进行连接Connected: ' + frame);
                 self.stompClient.subscribe('/topic/send', function(respnose){ //4
-                    console.log("||||||||");
+
                     self.showResponse(respnose);
         });
                 self.stompClient.subscribe('/user/topic/say', function(respnose){ //4
-                    console.log("||||||||");
+
                     self.showSay(respnose);
         });
 
@@ -80,13 +84,13 @@ var vm=new Vue({
             self.chattext=self.chattext+"||"+name;
 
 
-            self.chatinfo.push({"name":self.nowuser,"info":name});
+            var newDate=new Date();
+            var ti=newDate.toLocaleString();
+            ti=" ("+ti+") ";
+            self.chatinfo.push({"name":self.nowuser+ti,"info":name});
     },
         showResponse :function (message) {
-    console.log(message);
-    var response = $("#response");
-    response.html(message.body);
-
+            alert(message.body);
     },
 
         showSay: function(mes) {
@@ -101,9 +105,9 @@ var vm=new Vue({
 
     },
         sayAll : function () {
-            jQuery.getJSON("./ws/sendAll",function (data){
-                console.log(data);
-            })
+            var  self=this;
+            self.stompClient.send("/sayall",{},self.alltext);
+
         }
     },
 

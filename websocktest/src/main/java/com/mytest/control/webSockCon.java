@@ -1,5 +1,6 @@
 package com.mytest.control;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -13,7 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -52,9 +52,9 @@ public class webSockCon {
         return string;
     }
 
-    @MessageMapping("/say")
+    @MessageMapping("/sayall")
     public void withChat(Principal principal,String mes){
-        simpMessagingTemplate.convertAndSendToUser(principal.getName(),"/topic/send",mes);
+        simpMessagingTemplate.convertAndSend("/topic/send","来自:"+principal.getName()+mes);
     }
 
     // 用户注册
@@ -67,8 +67,9 @@ public class webSockCon {
         if(!map.containsKey(principal.getName())) {
             map.put(principal.getName(), principal);
             timeMap.put(principal.getName(),new Date());
+            simpMessagingTemplate.convertAndSend("/topic/send",principal.getName()+"已经登录");
         }
-        simpMessagingTemplate.convertAndSend("/topic/send","已经注册");
+
         return new JSONObject().put("result","ok");
     }
 
@@ -91,7 +92,12 @@ public class webSockCon {
         System.out.println(msg);
         String []s=msg.split("/");
 
-        simpMessagingTemplate.convertAndSendToUser(s[0],"/topic/say",principal.getName()+"/"+s[1]);
+        Date date=new Date();
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        String tim=df.format(date);
+        tim=" ("+tim+") ";
+        simpMessagingTemplate.convertAndSendToUser(s[0],"/topic/say",principal.getName()+tim+"/"+s[1]);
     }
 
 
@@ -109,12 +115,23 @@ public class webSockCon {
     @ResponseBody
     public Object getNum(Principal principal){
         JSONObject jsonObject=new JSONObject();
-        ArrayList arrayList=new ArrayList();
+        JSONArray jsonArray=new JSONArray();
+
         for (String key: map.keySet()) {
-            arrayList.add(key);
+            JSONObject jsonObject1=new JSONObject();
+            jsonObject1.put("name",key);
+            Date date=new Date();
+            long tt=date.getTime()-timeMap.get(key).getTime();
+            String timestr="";
+            while(tt>0){
+                timestr=tt%60+"/"+timestr;
+                tt=tt/60;
+            }
+            jsonObject1.put("time",timestr);
+            jsonArray.add(jsonObject1);
         }
         jsonObject.put("nowuser",principal.getName());
-        jsonObject.put("user",arrayList);
+        jsonObject.put("user",jsonArray);
         jsonObject.put("num",map.size());
         jsonObject.put("name",principal.getName());
         return jsonObject;
